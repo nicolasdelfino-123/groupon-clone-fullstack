@@ -1193,10 +1193,10 @@ def iniciar_sesion():
                 "nombre": usuario.nombre,
                 "apellido": usuario.apellido,
                 "role": usuario.role,
-                "activo": usuario.activo,
+                "activo": usuario.is_active,
                 "telefono": usuario.telefono,
-                "direccion1": usuario.direccion1,
-                "direccion2": usuario.direccion2,
+                "direccion1": usuario.direccion_line1,
+                "direccion2": usuario.direccion_line2,
                 "ciudad": usuario.ciudad,
                 "pais": usuario.pais
             }
