@@ -6,7 +6,7 @@
     "outputDirectory": "public",
     "functions": {
         "src/app.py": {
-            "runtime": "python3.9"
+            "runtime": "@vercel/python@3.9.16"
         }
     },
     "routes": [
