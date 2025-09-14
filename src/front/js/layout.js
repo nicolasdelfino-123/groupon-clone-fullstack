@@ -50,61 +50,61 @@ const Layout = () => {
 
   // En producción (Vercel), el backend está en /api del mismo dominio
   // En desarrollo, usar la variable de entorno o localhost
-  const backendURL = process.env.NODE_ENV === 'production' 
+  const backendURL = process.env.NODE_ENV === 'production'
     ? window.location.origin + '/api'
     : (process.env.BACKEND_URL || "http://localhost:3001");
 
   return (
     <div>
       <BrowserRouter basename={basename}>
-          <ScrollToTop />
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/demo" element={<Demo />} />
-            <Route path="/single/:theid" element={<Single />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/todaslascategorias"
-              element={<TodasLasCategorias />}
-            />
-            <Route path="/top" element={<VistasTop />} />
-            <Route path="/viajes" element={<VistasViajes />} />
-            <Route path="/belleza" element={<VistasBelleza />} />
-            <Route path="/gastronomia" element={<VistasGastronomia />} />
-            <Route
-              path="/politica-privacidad"
-              element={<VistaPoliticaDePrivacidad />}
-            />
-            <Route path="/cookies" element={<VistaCookies />} />
-            <Route path="/sobre-nosotros" element={<VistaSobreNosotros />} />
-            <Route path="/terminos" element={<VistaTerminosYCondiciones />} />
-            <Route path="/contacto" element={<VistaContacto />} />
-            <Route path="/crear-servicio" element={<VistaCrearServicio />} />
-            <Route path="/perfil" element={<VistaMiPerFil />} />
-            <Route path="/product-detail" element={<ProductDetail />} />
-            <Route path="/ofertas-destacadas" element={<OfertasDestacadas />} />
-            <Route path="/category/:categoryId" element={<CategoryPage />} />
-            <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="/admin/*" element={<AdminDashboard />} />
-            <Route path="/mis-compras" element={<VistaMisCompras />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/return" element={<Return />} />
-            <Route path="/search/:keyword" element={<VistaBusqueda />} />
-            <Route path="/mis-reservas" element={<VistaReservas />} />
-            <Route path="/product-detail/:id" element={<ProductDetail />} />
-            <Route path="/product/:category/:id" element={<ProductDetailBusqueda />} />
-       
-            <Route path="/recuperar-contrasena" element={<ForgotPasswordModal />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/newsletter/create" element={<CreateNewsletter />} />
-            <Route path="/newsletter" element={<AdminNewsletter />} />
-            <Route path="/newsletter/edit-newsletter/:id" element={<EditNewsletter />}/>
-            <Route path="/newsletter/view-newsletter/:id" element={<ViewNewsletter />}/>
-              
-          </Routes>
-          <Footer />
+        <ScrollToTop />
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/demo" element={<Demo />} />
+          <Route path="/single/:theid" element={<Single />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/todaslascategorias"
+            element={<TodasLasCategorias />}
+          />
+          <Route path="/top" element={<VistasTop />} />
+          <Route path="/viajes" element={<VistasViajes />} />
+          <Route path="/belleza" element={<VistasBelleza />} />
+          <Route path="/gastronomia" element={<VistasGastronomia />} />
+          <Route
+            path="/politica-privacidad"
+            element={<VistaPoliticaDePrivacidad />}
+          />
+          <Route path="/cookies" element={<VistaCookies />} />
+          <Route path="/sobre-nosotros" element={<VistaSobreNosotros />} />
+          <Route path="/terminos" element={<VistaTerminosYCondiciones />} />
+          <Route path="/contacto" element={<VistaContacto />} />
+          <Route path="/crear-servicio" element={<VistaCrearServicio />} />
+          <Route path="/perfil" element={<VistaMiPerFil />} />
+          <Route path="/product-detail" element={<ProductDetail />} />
+          <Route path="/ofertas-destacadas" element={<OfertasDestacadas />} />
+          <Route path="/category/:categoryId" element={<CategoryPage />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/*" element={<AdminDashboard />} />
+          <Route path="/mis-compras" element={<VistaMisCompras />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/return" element={<Return />} />
+          <Route path="/search/:keyword" element={<VistaBusqueda />} />
+          <Route path="/mis-reservas" element={<VistaReservas />} />
+          <Route path="/product-detail/:id" element={<ProductDetail />} />
+          <Route path="/product/:category/:id" element={<ProductDetailBusqueda />} />
+
+          <Route path="/recuperar-contrasena" element={<ForgotPasswordModal />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/newsletter/create" element={<CreateNewsletter />} />
+          <Route path="/newsletter" element={<AdminNewsletter />} />
+          <Route path="/newsletter/edit-newsletter/:id" element={<EditNewsletter />} />
+          <Route path="/newsletter/view-newsletter/:id" element={<ViewNewsletter />} />
+
+        </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );
