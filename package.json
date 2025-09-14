@@ -75,6 +75,7 @@
   "dependencies": {
     "@mui/icons-material": "^7.1.0",
     "@mui/utils": "^7.1.0",
+    "@neondatabase/serverless": "^1.0.1",
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.3.0",
     "bootstrap": "^5.3.6",
