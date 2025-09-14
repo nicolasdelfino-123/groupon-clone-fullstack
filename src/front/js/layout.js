@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { BackendURL } from "./component/backendURL";
 import ScrollToTop from "./component/ScrollToTop.jsx";
 
 import { Home } from "./pages/Home.jsx";
@@ -49,8 +48,11 @@ import ViewNewsletter from "./pages/ViewNewsletter.jsx";
 const Layout = () => {
   const basename = process.env.BASENAME || "";
 
-  if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "")
-    return <BackendURL />;
+  // En producción (Vercel), el backend está en /api del mismo dominio
+  // En desarrollo, usar la variable de entorno o localhost
+  const backendURL = process.env.NODE_ENV === 'production' 
+    ? window.location.origin + '/api'
+    : (process.env.BACKEND_URL || "http://localhost:3001");
 
   return (
     <div>
