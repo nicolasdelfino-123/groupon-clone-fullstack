@@ -1,39 +1,25 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "public"
-      }
+    "version": 2,
+    "framework": "react",
+    "installCommand": "npm install",
+    "buildCommand": "npm run build",
+    "outputDirectory": "public",
+    "functions": {
+        "src/app.py": {
+            "runtime": "python3.9"
+        }
     },
-    {
-      "src": "src/app.py",
-      "use": "@vercel/python"
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "src/app.py"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "public/$1"
+        }
+    ],
+    "env": {
+        "PYTHON_VERSION": "3.9"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "src/app.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "public/$1"
-    }
-  ],
-  "outputDirectory": "public",
-  "framework": "react",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "devCommand": "npm start",
-  "functions": {
-    "src/app.py": {
-      "runtime": "python3.9"
-    }
-  },
-  "env": {
-    "PYTHON_VERSION": "3.9"
-  }
 }
