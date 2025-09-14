@@ -1,5 +1,15 @@
 import { Tooltip } from "bootstrap";
-import { getAPIHost } from "../component/backendURL.js";
+
+// Función para obtener la URL del backend
+const getAPIHost = () => {
+  // Si estamos en Vercel (producción)
+  if (process.env.NODE_ENV === 'production') {
+    // En Vercel, el backend está en la misma URL base pero bajo /api
+    return window.location.origin + '/api';
+  }
+  // Para desarrollo local
+  return process.env.BACKEND_URL || "http://localhost:3001";
+};
 
 const getState = ({ getStore, getActions, setStore }) => {
   return {
