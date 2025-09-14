@@ -11,6 +11,7 @@ Configura estas variables en el panel de Vercel:
 - `FLASK_APP_KEY` = `tu_clave_secreta_super_segura_256_bits`
 - `FLASK_APP` = `src/app.py`
 - `FLASK_DEBUG` = `0`
+- `DEBUG` = `False`
 
 ### **Stripe (usar claves reales de tu cuenta)**
 - `STRIPE_SECRET_KEY` = `sk_test_tu_clave_secreta_stripe`
