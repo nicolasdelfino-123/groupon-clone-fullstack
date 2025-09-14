@@ -1,14 +1,18 @@
 {
     "version": 2,
-    "framework": "create-react-app",
-    "installCommand": "npm install",
-    "buildCommand": "npm run build",
-    "outputDirectory": "public",
-    "functions": {
-        "src/app.py": {
-            "runtime": "@vercel/python@3.9.16"
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "public"
+            }
+        },
+        {
+            "src": "src/app.py",
+            "use": "@vercel/python"
         }
-    },
+    ],
     "routes": [
         {
             "src": "/api/(.*)",
