@@ -2791,3 +2791,4 @@ def handler(request):
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
+// FORCE VERCEL UPDATE - dom 14 sep 2025 20:26:52 -03

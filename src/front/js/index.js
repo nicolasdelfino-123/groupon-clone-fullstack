@@ -11,3 +11,4 @@ import Layout from "./layout";
 // Render the app using React 18's createRoot
 const root = ReactDOM.createRoot(document.getElementById("app"));
 root.render(<Layout />);
+/* FORCE VERCEL UPDATE - dom 14 sep 2025 20:27:02 -03 */
