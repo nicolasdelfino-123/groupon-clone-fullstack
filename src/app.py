@@ -2780,6 +2780,13 @@ def list_payments():
     # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
 
+# Vercel serverless function handler
+def handler(request):
+    """
+    Handler para Vercel serverless functions
+    """
+    return app(request.environ, lambda *args: None)
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))

@@ -1,4 +1,5 @@
 import { Tooltip } from "bootstrap";
+import { getAPIHost } from "../component/backendURL.js";
 
 const getState = ({ getStore, getActions, setStore }) => {
   return {
@@ -206,7 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: "******"
           });
 
-          const resp = await fetch(process.env.BACKEND_URL + '/registro', {
+          const resp = await fetch(getAPIHost() + '/registro', {
             method: 'POST',
             headers: {
               "Content-Type": "application/json",
@@ -244,7 +245,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           // fetching data from the backend
           const resp = await fetch(
-            process.env.BACKEND_URL + "/api/hello"
+            getAPIHost() + "/api/hello"
           );
           const data = await resp.json();
           setStore({ message: data.message });
@@ -349,7 +350,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       cargarServiciosViajes: async () => {
         try {
           const resp = await fetch(
-            process.env.BACKEND_URL + "/viajes"
+            getAPIHost() + "/viajes"
           );
           const data = await resp.json();
           const viajes = data.viajes || [];
@@ -364,7 +365,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       cargarServiciosGastronomia: async () => {
         try {
           const resp = await fetch(
-            process.env.BACKEND_URL + "/gastronomia"
+            getAPIHost() + "/gastronomia"
           );
           const data = await resp.json();
           const gastronomia = data.gastronomia || [];
@@ -379,7 +380,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       cargarServiciosBelleza: async () => {
         try {
           const resp = await fetch(
-            process.env.BACKEND_URL + "/belleza"
+            getAPIHost() + "/belleza"
           );
           const data = await resp.json();
           const belleza = data.belleza || [];
@@ -394,7 +395,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       cargarServiciosTop: async () => {
         try {
-          const resp = await fetch(process.env.BACKEND_URL + "/top");
+          const resp = await fetch(getAPIHost() + "/top");
           const data = await resp.json();
           const top = data.top || [];
           setStore({ serviciosTop: top });
@@ -409,7 +410,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       cargarServiciosOfertas: async () => {
         try {
           const resp = await fetch(
-            process.env.BACKEND_URL + "/ofertas"
+            getAPIHost() + "/ofertas"
           );
           const data = await resp.json();
           const ofertas = data.ofertas || [];
@@ -432,7 +433,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             return false;
           }
 
-          const resp = await fetch(process.env.BACKEND_URL + '/registro', {
+          const resp = await fetch(getAPIHost() + '/registro', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -470,7 +471,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           const token = localStorage.getItem("token");
           const resp = await fetch(
-            process.env.BACKEND_URL + "/newsletter",
+            getAPIHost() + "/newsletter",
             {
               method: "GET",
               headers: {
@@ -495,7 +496,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           const token = localStorage.getItem("token");
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/newsletter/${id}`,
+            `${getAPIHost()}/newsletter/${id}`,
             {
               method: "DELETE",
               headers: {
@@ -519,7 +520,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           const token = localStorage.getItem("token");
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/newsletter/send`, {
+            `${getAPIHost()}/newsletter/send`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -546,7 +547,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           const token = localStorage.getItem("token");
           const resp = await fetch(
-            process.env.BACKEND_URL + "/newsletteradd",
+            getAPIHost() + "/newsletteradd",
             {
               method: "POST",
               headers: {
@@ -574,7 +575,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       editNewsletter: async (services, titulo, asunto, id) => {
         try {
           const token = localStorage.getItem("token");
-          const resp = await fetch(process.env.BACKEND_URL + '/newsletter/' + id, {
+          const resp = await fetch(getAPIHost() + '/newsletter/' + id, {
             method: 'PUT',
             body: JSON.stringify({
               "titulo": titulo,
@@ -601,7 +602,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       getOneNewsletter: async (id) => {
         try {
           const token = localStorage.getItem("token");
-          const resp = await fetch(process.env.BACKEND_URL + "/newsletter/" + id, {
+          const resp = await fetch(getAPIHost() + "/newsletter/" + id, {
             method: 'GET',
             headers: {
               "Content-Type": "application/json",
@@ -622,7 +623,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       ,
       getCategorias: async () => {
         let categorias = [];
-        await fetch(`${process.env.BACKEND_URL}/categorias`)
+        await fetch(`${getAPIHost()}/categorias`)
           .then((res) => res.json())
           .then((data) => {
             // Asegurate de acceder a data.categorias
@@ -640,7 +641,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       getUsersCombo: async () => {
         let usuarios = [];
-        await fetch(`${process.env.BACKEND_URL}/usuarios`)
+        await fetch(`${getAPIHost()}/usuarios`)
           .then((res) => res.json())
           .then((data) => {
             data.usuarios.forEach((usuario) => {
@@ -657,7 +658,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           const token = localStorage.getItem("token");
           const resp = await fetch(
-            process.env.BACKEND_URL + "/usuarios/me",
+            getAPIHost() + "/usuarios/me",
             {
               method: "PUT",
               headers: {
@@ -700,7 +701,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
         try {
           const response = await fetch(
-            process.env.BACKEND_URL + "/api/change-password",
+            getAPIHost() + "/api/change-password",
             {
               method: "PUT",
               headers: {
@@ -732,7 +733,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           // Enviar la solicitud de login al backend
           const resp = await fetch(
-            process.env.BACKEND_URL + "/login",
+            getAPIHost() + "/login",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -755,7 +756,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           // 1) Login
           const resp = await fetch(
-            `${process.env.BACKEND_URL}/login`,
+            `${getAPIHost()}/login`,
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -780,7 +781,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.warn("No se recibieron datos del usuario. Obteniendo desde API...");
             // Fallback: obtener datos del usuario desde otro endpoint
             const userResp = await fetch(
-              `${process.env.BACKEND_URL}/usuarios/me`,
+              `${getAPIHost()}/usuarios/me`,
               {
                 headers: { Authorization: `Bearer ${data.access_token}` }
               }
