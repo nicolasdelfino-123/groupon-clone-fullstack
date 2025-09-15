@@ -2,7 +2,27 @@ from flask import Blueprint, jsonify, request
 from .models import db, Viajes, Ofertas, Belleza, Gastronomia, Top, User, NewsletterSubscriptions
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from flask_bcrypt import Bcrypt
+from sqlalchemy import text
+from decimal import Decimal
+from datetime import date, datetime
 import traceback
+
+# --- helpers de serialización JSON seguros ---
+def _to_json_safe(val):
+    if isinstance(val, Decimal):
+        return float(val)
+    if isinstance(val, (datetime, date)):
+        return val.isoformat()
+    return val
+
+def rows_to_dicts(rows, columns):
+    out = []
+    for r in rows:
+        item = {}
+        for idx, col in enumerate(columns):
+            item[col] = _to_json_safe(r[idx])
+        out.append(item)
+    return out
 
 api = Blueprint('api', __name__)
 
@@ -28,19 +48,93 @@ def hello():
 @api.route('/viajes', methods=['GET'])
 def obtener_viajes():
     try:
-        viajes_items = Viajes.query.order_by(Viajes.id.asc()).all()
-        viajes_serializados = [viaje.serialize() for viaje in viajes_items]
-
-        return jsonify({
-            "success": True,
-            "count": len(viajes_serializados),
-            "viajes": viajes_serializados
-        }), 200
+        # Consulta SQL directa para evitar problemas de serialización
+        sql = text("SELECT id, title as nombre, descripcion as description, price as original_price, discountPrice as discounted_price, image, city as location, rating, reviews, buyers, user_id FROM viajes ORDER BY id DESC LIMIT 50")
+        result = db.session.execute(sql)
+        rows = result.fetchall()
+        
+        if rows:
+            columns = ['id', 'nombre', 'description', 'original_price', 'discounted_price', 'image', 'location', 'rating', 'reviews', 'buyers', 'user_id']
+            viajes_data = rows_to_dicts(rows, columns)
+        else:
+            viajes_data = []
+        
+        return jsonify({"viajes": viajes_data, "success": True, "count": len(viajes_data)}), 200
     except Exception as e:
-        return jsonify({
-            "error": "Error al obtener viajes",
-            "details": str(e)
-        }), 500
+        print(f"Error en /viajes: {e}")
+        return jsonify({"error": f"Error al obtener viajes: {str(e)}", "viajes": []}), 200
+
+@api.route('/gastronomia', methods=['GET'])
+def obtener_gastronomia():
+    try:
+        sql = text("SELECT id, title as nombre, descripcion as description, price as original_price, discountPrice as discounted_price, image, city as location, rating, reviews, buyers, user_id FROM gastronomia ORDER BY id DESC LIMIT 50")
+        result = db.session.execute(sql)
+        rows = result.fetchall()
+        
+        if rows:
+            columns = ['id', 'nombre', 'description', 'original_price', 'discounted_price', 'image', 'location', 'rating', 'reviews', 'buyers', 'user_id']
+            gastro_data = rows_to_dicts(rows, columns)
+        else:
+            gastro_data = []
+        
+        return jsonify({"gastronomia": gastro_data, "success": True, "count": len(gastro_data)}), 200
+    except Exception as e:
+        print(f"Error en /gastronomia: {e}")
+        return jsonify({"error": f"Error al obtener gastronomía: {str(e)}", "gastronomia": []}), 200
+
+@api.route('/belleza', methods=['GET'])
+def obtener_belleza():
+    try:
+        sql = text("SELECT id, title as nombre, descripcion as description, price as original_price, discountPrice as discounted_price, image, city as location, rating, reviews, buyers, user_id FROM belleza ORDER BY id DESC LIMIT 50")
+        result = db.session.execute(sql)
+        rows = result.fetchall()
+        
+        if rows:
+            columns = ['id', 'nombre', 'description', 'original_price', 'discounted_price', 'image', 'location', 'rating', 'reviews', 'buyers', 'user_id']
+            belleza_data = rows_to_dicts(rows, columns)
+        else:
+            belleza_data = []
+        
+        return jsonify({"belleza": belleza_data, "success": True, "count": len(belleza_data)}), 200
+    except Exception as e:
+        print(f"Error en /belleza: {e}")
+        return jsonify({"error": f"Error al obtener belleza: {str(e)}", "belleza": []}), 200
+
+@api.route('/top', methods=['GET'])
+def obtener_top():
+    try:
+        sql = text("SELECT id, title as nombre, descripcion as description, price as original_price, discountPrice as discounted_price, image, city as location, rating, reviews, buyers, user_id FROM top ORDER BY id DESC LIMIT 50")
+        result = db.session.execute(sql)
+        rows = result.fetchall()
+        
+        if rows:
+            columns = ['id', 'nombre', 'description', 'original_price', 'discounted_price', 'image', 'location', 'rating', 'reviews', 'buyers', 'user_id']
+            top_data = rows_to_dicts(rows, columns)
+        else:
+            top_data = []
+        
+        return jsonify({"top": top_data, "success": True, "count": len(top_data)}), 200
+    except Exception as e:
+        print(f"Error en /top: {e}")
+        return jsonify({"error": f"Error al obtener top: {str(e)}", "top": []}), 200
+
+@api.route('/ofertas', methods=['GET'])
+def obtener_ofertas():
+    try:
+        sql = text("SELECT id, title as nombre, descripcion as description, price as original_price, discountPrice as discounted_price, image, city as location, rating, reviews, buyers, user_id FROM ofertas ORDER BY id DESC LIMIT 50")
+        result = db.session.execute(sql)
+        rows = result.fetchall()
+        
+        if rows:
+            columns = ['id', 'nombre', 'description', 'original_price', 'discounted_price', 'image', 'location', 'rating', 'reviews', 'buyers', 'user_id']
+            ofertas_data = rows_to_dicts(rows, columns)
+        else:
+            ofertas_data = []
+        
+        return jsonify({"ofertas": ofertas_data, "success": True, "count": len(ofertas_data)}), 200
+    except Exception as e:
+        print(f"Error en /ofertas: {e}")
+        return jsonify({"error": f"Error al obtener ofertas: {str(e)}", "ofertas": []}), 200
 
 # Obtener todas las ofertas
 @api.route('/ofertas', methods=['GET'])
