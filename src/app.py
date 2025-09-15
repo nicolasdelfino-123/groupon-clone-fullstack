@@ -87,40 +87,52 @@ app.register_blueprint(payment_bp)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
-@app.before_request
-def inicializar_db():
-    categorias = [
-        {"id": 1, "nombre": "Viajes"},
-        {"id": 2, "nombre": "Belleza"},
-        {"id": 3, "nombre": "Top"},
-        {"id": 4, "nombre": "Gastronomía"},
-        {"id": 5, "nombre": "Ofertas"},
-    ]
+# Inicialización de la base de datos al arranque (NO en cada request)
+def inicializar_db_startup():
+    """Inicializar la base de datos solo al arranque"""
+    with app.app_context():
+        try:
+            # Crear todas las tablas si no existen
+            db.create_all()
+            
+            categorias = [
+                {"id": 1, "nombre": "Viajes"},
+                {"id": 2, "nombre": "Belleza"},
+                {"id": 3, "nombre": "Top"},
+                {"id": 4, "nombre": "Gastronomía"},
+                {"id": 5, "nombre": "Ofertas"},
+            ]
 
-    for cat in categorias:
-        if not Category.query.get(cat["id"]):
-            db.session.add(Category(id=cat["id"], nombre=cat["nombre"]))
-    db.session.commit()
+            for cat in categorias:
+                if not Category.query.get(cat["id"]):
+                    db.session.add(Category(id=cat["id"], nombre=cat["nombre"]))
+            db.session.commit()
 
-    # ID de usuario (ajusta si no existe)
-    user_id = 1
+            # ID de usuario (ajusta si no existe)
+            user_id = 1
 
-    # IDs de categoría ya asegurados arriba
-    viajes_category_id = 1
-    belleza_category_id = 2
-    top_category_id = 3
-    gastronomia_category_id = 4
-    ofertas_category_id = 5
+            # IDs de categoría ya asegurados arriba
+            viajes_category_id = 1
+            belleza_category_id = 2
+            top_category_id = 3
+            gastronomia_category_id = 4
+            ofertas_category_id = 5
 
-    # Inicializar servicios si no existen
-    inicializar_servicios(
-        user_id,
-        viajes_category_id,
-        top_category_id,
-        belleza_category_id,
-        gastronomia_category_id,
-        ofertas_category_id
-    )
+            # Inicializar servicios si no existen
+            inicializar_servicios(
+                user_id,
+                viajes_category_id,
+                top_category_id,
+                belleza_category_id,
+                gastronomia_category_id,
+                ofertas_category_id
+            )
+            print("✅ Base de datos inicializada correctamente")
+        except Exception as e:
+            print(f"❌ Error al inicializar DB: {e}")
+
+# Llamar la inicialización solo una vez al arranque
+inicializar_db_startup()
 
 
 # generate sitemap with all your endpoints
