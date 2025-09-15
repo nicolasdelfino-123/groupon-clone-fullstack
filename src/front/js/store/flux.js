@@ -1,15 +1,7 @@
 import { Tooltip } from "bootstrap";
+import { apiFetch } from "../api.js";
 
-// Función para obtener la URL del backend
-const getAPIHost = () => {
-  // Si estamos en Vercel (producción)
-  if (process.env.NODE_ENV === 'production') {
-    // En Vercel, el backend está en la misma URL base pero bajo /api
-    return window.location.origin + '/api';
-  }
-  // Para desarrollo local
-  return process.env.BACKEND_URL || "http://localhost:3001";
-};
+// NOTA: apiFetch ya maneja las URLs correctamente, no necesitamos getAPIHost
 
 const getState = ({ getStore, getActions, setStore }) => {
   return {
@@ -217,7 +209,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: "******"
           });
 
-          const resp = await fetch(getAPIHost() + '/registro', {
+          const data = await apiFetch('/registro', {
             method: 'POST',
             headers: {
               "Content-Type": "application/json",
@@ -225,22 +217,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
             body: JSON.stringify(userData)
           });
-
-          const responseText = await resp.text();
-          console.log("Respuesta del servidor (texto):", responseText);
-
-          let data;
-          try {
-            data = JSON.parse(responseText);
-          } catch (e) {
-            console.error("Error al parsear la respuesta como JSON:", e);
-            throw new Error("Error inesperado en la respuesta del servidor");
-          }
-
-          if (!resp.ok) {
-            console.error("Error de registro:", data);
-            throw new Error(data.error || "Error en el registro");
-          }
 
           console.log("Registro exitoso, datos del usuario:", data.user);
           return data.user;
@@ -254,10 +230,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       getMessage: async () => {
         try {
           // fetching data from the backend
-          const resp = await fetch(
-            getAPIHost() + "/api/hello"
-          );
-          const data = await resp.json();
+          const data = await apiFetch("/hello");
           setStore({ message: data.message });
           return data;
         } catch (error) {
@@ -359,10 +332,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       // Cargar servicios (viajes, gastronomía, belleza, etc.)
       cargarServiciosViajes: async () => {
         try {
-          const resp = await fetch(
-            getAPIHost() + "/viajes"
-          );
-          const data = await resp.json();
+          const data = await apiFetch("/viajes");
           const viajes = data.viajes || [];
           setStore({ serviciosViajes: viajes });
           return viajes;
@@ -374,10 +344,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       cargarServiciosGastronomia: async () => {
         try {
-          const resp = await fetch(
-            getAPIHost() + "/gastronomia"
-          );
-          const data = await resp.json();
+          const data = await apiFetch("/gastronomia");
           const gastronomia = data.gastronomia || [];
           setStore({ serviciosGastronomia: gastronomia });
           return gastronomia;
@@ -389,10 +356,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       cargarServiciosBelleza: async () => {
         try {
-          const resp = await fetch(
-            getAPIHost() + "/belleza"
-          );
-          const data = await resp.json();
+          const data = await apiFetch("/belleza");
           const belleza = data.belleza || [];
           setStore({ serviciosBelleza: belleza });
           console.log("SERVICOSSS BELLEZAAAAAAAA", belleza);
@@ -405,8 +369,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       cargarServiciosTop: async () => {
         try {
-          const resp = await fetch(getAPIHost() + "/top");
-          const data = await resp.json();
+          const data = await apiFetch("/top");
           const top = data.top || [];
           setStore({ serviciosTop: top });
           console.log("SERVICOSSS TOOOOOPPPP", top);
@@ -419,10 +382,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       cargarServiciosOfertas: async () => {
         try {
-          const resp = await fetch(
-            getAPIHost() + "/ofertas"
-          );
-          const data = await resp.json();
+          const data = await apiFetch("/ofertas");
           const ofertas = data.ofertas || [];
           setStore({ serviciosOfertas: ofertas });
           return ofertas;
@@ -443,7 +403,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             return false;
           }
 
-          const resp = await fetch(getAPIHost() + '/registro', {
+          const data = await apiFetch('/registro', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -458,13 +418,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             })
           });
 
-          if (!resp.ok) {
-            const data = await resp.json();
-            console.error("Error en registro:", data);
-            return false;
-          }
-
-          const data = await resp.json();
           console.log("Registro exitoso:", data);
 
           // Guardar el correo para autocompletarlo en el login
@@ -480,20 +433,12 @@ const getState = ({ getStore, getActions, setStore }) => {
       getNewsletters: async () => {
         try {
           const token = localStorage.getItem("token");
-          const resp = await fetch(
-            getAPIHost() + "/newsletter",
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          if (!resp.ok) {
-            console.error("Error al obtener los newsletter");
-            return false;
-          }
-          const data = await resp.json();
+          const data = await apiFetch("/newsletter", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           setStore({ newsletters: data });
           return true;
         } catch (error) {
@@ -505,16 +450,13 @@ const getState = ({ getStore, getActions, setStore }) => {
       deleteNewsletter: async (id) => {
         try {
           const token = localStorage.getItem("token");
-          const resp = await fetch(
-            `${getAPIHost()}/newsletter/${id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`,
-              },
-            }
-          );
+          const data = await apiFetch(`/newsletter/${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`,
+            },
+          });
 
           if (!resp.ok) {
             console.error("Error al eliminar newsletter");
